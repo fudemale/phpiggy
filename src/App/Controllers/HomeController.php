@@ -21,7 +21,12 @@ class HomeController
 
     public function home()
     {
-        dd($this->view);
-        echo 'home page';
+
+        // $secret = "Hussain";
+        $this->view->render("/index.php", [
+            'title' => 'Home Page'
+        ]);
+        // $data array as a variable is used as a parameter from the render method
+        // the included files has access to the parameters data which not in case of $secret as it's function scoped
     }
 }
