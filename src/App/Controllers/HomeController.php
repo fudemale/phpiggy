@@ -23,7 +23,7 @@ class HomeController
     {
 
         // $secret = "Hussain";
-        $this->view->render("/index.php", [
+        echo $this->view->render("/index.php", [
             'title' => 'Home Page'
         ]);
         // $data array as a variable is used as a parameter from the render method
