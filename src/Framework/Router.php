@@ -8,6 +8,8 @@ class Router
 {
     private array $routes = [];
 
+    private array $middleware = [];
+
     public function add(string $method, string $path, array $controller)
     {
 
@@ -50,6 +52,13 @@ class Router
             $controllerInstance->{$function}();
             // it's acceptable to type a string after -> PHP resolves the value in string to a method in class
         }
+    }
+
+
+
+    public function addMiddleware(string $middleware)
+    {
+        $this->middleware[] = $middleware;
     }
 
     //^ Routes are required to display data from server to browser so using dispatch fn here
