@@ -8,7 +8,7 @@ class Router
 {
     private array $routes = [];
 
-    private array $middleware = [];
+    private array $middlewares = [];
 
     public function add(string $method, string $path, array $controller)
     {
@@ -49,8 +49,17 @@ class Router
             // controller item is an array storing class name & method name
             $controllerInstance = $container ? $container->resolve($class) : new $class;
             // ^ it's ok to provide a string after new keyword as string points to a class with ns as we're instantiating controllerinstance
-            $controllerInstance->{$function}();
+            $action = fn () => $controllerInstance->{$function}();
             // it's acceptable to type a string after -> PHP resolves the value in string to a method in class
+
+            foreach ($this->middlewares as $middleware) {
+                $middlewareInstance = new $middleware;
+                $action = fn () => $middlewareInstance->process($action);
+            }
+
+            $action();
+
+            return;
         }
     }
 
@@ -58,7 +67,7 @@ class Router
 
     public function addMiddleware(string $middleware)
     {
-        $this->middleware[] = $middleware;
+        $this->middlewares[] = $middleware;
     }
 
     //^ Routes are required to display data from server to browser so using dispatch fn here

@@ -22,7 +22,6 @@ class App
         }
     }
     public function run()
-
     {
 
         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -34,5 +33,10 @@ class App
     // ^ was a add fn before changed to get as it's a get method
     {
         $this->router->add('GET', $path, $controller);
+    }
+
+    public function addMiddleware(string $middleware)
+    {
+        $this->router->addMiddleware($middleware);
     }
 }

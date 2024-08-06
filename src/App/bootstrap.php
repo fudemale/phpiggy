@@ -9,7 +9,7 @@ use Framework\App;
 use App\Config\Paths;
 
 // use App\Controllers\{HomeController, AboutController};
-use function App\Config\registerRoutes;
+use function App\Config\{registerRoutes, registerMiddleware};
 // HomeController::class;
 // AboutController::class;
 
@@ -17,6 +17,7 @@ $app = new App(Paths::SOURCE . "/App/container-definitions.php");
 
 
 registerRoutes($app);
+registerMiddleware($app);
 // $app->get('/', [HomeController::class, 'home']);
 // $app->get('/about', [AboutController::class, 'about']);
 return $app;
