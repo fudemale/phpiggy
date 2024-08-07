@@ -53,7 +53,7 @@ class Router
             // it's acceptable to type a string after -> PHP resolves the value in string to a method in class
 
             foreach ($this->middlewares as $middleware) {
-                $middlewareInstance = new $middleware;
+                $middlewareInstance = $container ? $container->resolve($middleware) :  new $middleware;
                 $action = fn () => $middlewareInstance->process($action);
             }
 
