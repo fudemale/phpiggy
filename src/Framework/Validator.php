@@ -20,15 +20,24 @@ class Validator
         $error = [];
         foreach ($fields as $fieldName => $rules) {
             foreach ($rules as $rule) {
+                $ruleParams = [];
+                if (str_contains($rule, ':')) {
+                    [$rule, $ruleParams] = explode(':', $rule);
+                    // explode splits a string into by splitting the string with char within the string
+                    $ruleParams = explode(',', $ruleParams);
+                    // dd($ruleParams);
+                }
+
                 $ruleValidator = $this->rules[$rule];
 
-                if ($ruleValidator->validate($formData, $fieldName, [])) {
+                if ($ruleValidator->validate($formData, $fieldName, $ruleParams)) {
                     continue;
                 }
                 $errors[$fieldName][] = $ruleValidator->getMessage(
                     $formData,
                     $fieldName,
-                    []
+                    $ruleParams
+                    // [] we were passing an empty arr before the rules for errors to both methods, now we have $ruleParams
                 );
             }
         }
