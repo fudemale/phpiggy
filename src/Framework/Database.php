@@ -8,7 +8,7 @@ use PDO, PDOException, PDOStatement;
 
 class Database
 {
-    public PDO $connection;
+    private PDO $connection;
     // private PDOStatement $stmt;
 
     public function __construct(
@@ -26,5 +26,9 @@ class Database
         } catch (PDOException $e) {
             die("Unable to connect to database");
         }
+    }
+    public function query(string $query)
+    {
+        $this->connection->query($query);
     }
 }
