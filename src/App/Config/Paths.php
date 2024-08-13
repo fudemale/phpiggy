@@ -11,4 +11,6 @@ class Paths
 
 
     public const SOURCE = __DIR__ . "/../../";
+
+    public const ROOT = __DIR__ . "/../../../";
 }
