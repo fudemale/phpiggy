@@ -28,12 +28,10 @@
 
                         Logout
                     </a>
-                <?php else: ?>
+                <?php else : ?>
                     <a href="/login" class="text-gray-300 hover:text-white transition">Login</a>
                     <a href="/register" class="text-gray-300 hover:text-white transition">Register</a>
                 <?php endif; ?>
-
-
             </div>
         </nav>
     </header>
