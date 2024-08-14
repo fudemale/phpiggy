@@ -20,6 +20,7 @@ class Router
             'method' => strtoupper($method),
             // to keep the consistent paths^
             'controller' => $controller,
+            'middlewares' => []
         ];
     }
 
@@ -32,7 +33,7 @@ class Router
         return $path;
     }
 
-    public function dispath(string $path, string $method, Container $container = null)
+    public function dispatch(string $path, string $method, Container $container = null)
     {
         $path = $this->normalizePath($path);
         $method = strtoupper($method);
@@ -49,12 +50,13 @@ class Router
             // controller item is an array storing class name & method name
             $controllerInstance = $container ? $container->resolve($class) : new $class;
             // ^ it's ok to provide a string after new keyword as string points to a class with ns as we're instantiating controllerinstance
-            $action = fn () => $controllerInstance->{$function}();
+            $action = fn() => $controllerInstance->{$function}();
             // it's acceptable to type a string after -> PHP resolves the value in string to a method in class
+            $allMiddleware = [...$route['middlewares'], ...$this->middlewares];
 
-            foreach ($this->middlewares as $middleware) {
+            foreach ($allMiddleware as $middleware) {
                 $middlewareInstance = $container ? $container->resolve($middleware) :  new $middleware;
-                $action = fn () => $middlewareInstance->process($action);
+                $action = fn() => $middlewareInstance->process($action);
             }
 
             $action();
@@ -70,5 +72,10 @@ class Router
         $this->middlewares[] = $middleware;
     }
 
+    public function addRouteMiddleware(string $middleware)
+    {
+        $lastRouteKey = array_key_last($this->routes);
+        $this->routes[$lastRouteKey]['middlewares'][] = $middleware;
+    }
     //^ Routes are required to display data from server to browser so using dispatch fn here
 }
