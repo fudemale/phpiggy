@@ -46,8 +46,16 @@ class Database
     {
         return $this->stmt->fetch();
     }
+    // ^ this method is returning one result
     public function id()
     {
         return $this->connection->lastInsertId();
     }
+
+    public function findAll()
+    {
+        return $this->stmt->fetchAll();
+    }
+
+    // ^ page has multiple transactions so we're using this fetchAll
 }
