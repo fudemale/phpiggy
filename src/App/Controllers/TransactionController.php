@@ -29,37 +29,37 @@ class TransactionController
         redirectTo('/');
     }
 
-    //   public function editView(array $params)
-    //   {
-    //     $transaction = $this->transactionService->getUserTransaction(
-    //       $params['transaction']
-    //     );
+    public function editView(array $params)
+    {
+        $transaction = $this->transactionService->getUserTransaction(
+            $params['transaction']
+        );
 
-    //     if (!$transaction) {
-    //       redirectTo('/');
-    //     }
+        if (!$transaction) {
+            redirectTo('/');
+        }
 
-    //     echo $this->view->render('transactions/edit.php', [
-    //       'transaction' => $transaction
-    //     ]);
-    //   }
+        echo $this->view->render('transactions/edit.php', [
+            'transaction' => $transaction
+        ]);
+    }
 
-    //   public function edit(array $params)
-    //   {
-    //     $transaction = $this->transactionService->getUserTransaction(
-    //       $params['transaction']
-    //     );
+    public function edit(array $params)
+    {
+        $transaction = $this->transactionService->getUserTransaction(
+            $params['transaction']
+        );
 
-    //     if (!$transaction) {
-    //       redirectTo('/');
-    //     }
+        if (!$transaction) {
+            redirectTo('/');
+        }
 
-    //     $this->validatorService->validateTransaction($_POST);
+        $this->validatorService->validateTransaction($_POST);
 
-    //     $this->transactionService->update($_POST, $transaction['id']);
+        $this->transactionService->update($_POST, $transaction['id']);
 
-    //     redirectTo($_SERVER['HTTP_REFERER']);
-    //   }
+        redirectTo($_SERVER['HTTP_REFERER']);
+    }
 
     //   public function delete(array $params)
     //   {
