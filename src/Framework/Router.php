@@ -10,6 +10,8 @@ class Router
 
     private array $middlewares = [];
 
+    private array $errorHandler;
+
     public function add(string $method, string $path, array $controller)
     {
 
@@ -74,6 +76,8 @@ class Router
 
             return;
         }
+
+        $this->dispatchNotFound($container);
     }
 
 
@@ -89,4 +93,26 @@ class Router
         $this->routes[$lastRouteKey]['middlewares'][] = $middleware;
     }
     //^ Routes are required to display data from server to browser so using dispatch fn here
+    public function setErrorHandler(array $controller)
+    {
+        $this->errorHandler = $controller;
+    }
+
+    public function dispatchNotFound(?Container $container)
+    {
+        [$class, $function] = $this->errorHandler;
+
+        $controllerInstance = $container ? $container->resolve($class) : new $class;
+
+        $action = fn() => $controllerInstance->$function();
+
+        foreach ($this->middlewares as $middleware) {
+            $middlewareInstance = $container ? $container->resolve($middleware) : new $middleware;
+            $action = fn() => $middlewareInstance->process($action);
+        }
+
+        $action();
+    }
 }
+
+// ^ exact same code as dispatch method, the main difference is this method creates an instance of a specific controller where dispatch selects the controller based on route
